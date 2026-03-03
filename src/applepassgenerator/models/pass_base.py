@@ -439,7 +439,7 @@ class ApplePass(object):
             certificate (str): Path to certificate file
             key (str): Path to private key file
             wwdr_certificate (str): Path to WWDR certificate
-            password (str): Certificate password
+            password (str | None): Certificate password or None if no password
         
         Returns:
             bytes: DER-encoded PKCS#7 signature
@@ -447,7 +447,7 @@ class ApplePass(object):
         cert = x509.load_pem_x509_certificate(self._read_file_bytes(certificate))
         priv_key = serialization.load_pem_private_key(
             self._read_file_bytes(key), 
-            password=password.encode("UTF-8")
+            password=password.encode('utf-8') if password else None
         )
         wwdr_cert = x509.load_pem_x509_certificate(
             self._read_file_bytes(wwdr_certificate)
